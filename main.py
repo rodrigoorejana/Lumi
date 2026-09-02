@@ -1,54 +1,69 @@
+#!/usr/bin/env python3
+
 import os
 import json
 import pyaudio
+import pyttsx3
 from vosk import Model, KaldiRecognizer, SetLogLevel
 
-# Suppress internal Vosk C++ logs
+# Suppress internal C++ logs from Vosk
 SetLogLevel(-1)
 
-# Check if model exists
+# Initialize TTS Engine
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+if voices:
+    engine.setProperty('voice', voices[-2].id)
+
+# Initialize Vosk Model
 if not os.path.exists("model"):
-    print("Please download the model from https://alphacephei.com/vosk/models and unpack as 'model' in the current folder.")
+    print("Model directory not found.")
     exit(1)
 
-print("Iniciando a Lumi...")
+model = Model('model')
+rec = KaldiRecognizer(model, 16000)
 
-# Initialize Vosk model and recognizer
-model = Model("model")
-recognizer = KaldiRecognizer(model, 16000)
-
-# Initialize PyAudio stream
+# Initialize PyAudio
 p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8000)
 stream.start_stream()
 
-print("Pode falar (LUMI escutando offline)...")
+def speak(text):
+    # Stop microphone stream while speaking to prevent self-listening loop
+    stream.stop_stream()
+    engine.say(text)
+    engine.runAndWait()
+    # Clear leftover audio buffer and resume recording
+    stream.flushed = True
+    stream.start_stream()
+
+print("Lumi pronta e escutando...")
 
 try:
     while True:
-        # Read audio chunk safely
+        # Avoid crash on buffer overflow
         data = stream.read(4000, exception_on_overflow=False)
         if len(data) == 0:
             break
 
-        # Process complete speech segment
-        if recognizer.AcceptWaveform(data):
-            result = json.loads(recognizer.Result())
-            text = result.get("text", "")
+        if rec.AcceptWaveform(data):
+            result = json.loads(rec.Result())
+            text = result.get('text', '')
 
-            # Print recognized text only when non-empty
             if text:
                 print(f"Você disse: {text}")
-
+                
                 if "desligar" in text.lower():
-                    print("Desligando...")
+                    speak("Desligando...")
                     break
+                
+                speak(text)
 
 except KeyboardInterrupt:
-    print("\nLumi encerrada pelo usuário.")
+    print("\nEncerrando...")
 
 finally:
-    # Clean up audio stream resources
+    # Cleanup audio resources
     stream.stop_stream()
     stream.close()
     p.terminate()
