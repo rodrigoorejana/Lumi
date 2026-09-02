@@ -5,6 +5,7 @@ import json
 import pyaudio
 import pyttsx3
 from vosk import Model, KaldiRecognizer, SetLogLevel
+import core
 
 # Suppress internal C++ logs from Vosk
 SetLogLevel(-1)
@@ -33,9 +34,10 @@ def speak(text):
     stream.stop_stream()
     engine.say(text)
     engine.runAndWait()
-    # Clear leftover audio buffer and resume recording
-    stream.flushed = True
+    
+    # Restart stream and clear any audio accumulated during speech
     stream.start_stream()
+    stream.read(stream.get_read_available(), exception_on_overflow=False)
 
 print("Lumi pronta e escutando...")
 
@@ -53,11 +55,14 @@ try:
             if text:
                 print(f"Você disse: {text}")
                 
+                # Command: Shutdown
                 if "desligar" in text.lower():
                     speak("Desligando...")
                     break
-                
-                speak(text)
+
+                # Command: Tell time (flexible matching)
+                if "que horas são" in text.lower() or "horas" in text.lower():
+                    speak(core.SystemInfo.get_time())
 
 except KeyboardInterrupt:
     print("\nEncerrando...")
