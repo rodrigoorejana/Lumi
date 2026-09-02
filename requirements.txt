@@ -1,1 +1,3 @@
-SpeechRecognation=>3.17.0  
+SpeechRecognition==3.17.0
+vosk
+pyaudio
