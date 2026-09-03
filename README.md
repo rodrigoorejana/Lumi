@@ -6,6 +6,6 @@ Foco:
     Rápido e expansível.
 
 Técnologias:
-    Reconhecimento de voz.
-    Síntese de voz.
-    Algum tipo de IA.
+    Reconhecimento de voz. (vosk para reconhecimento offline)
+    Síntese de voz. (pyttsx3)
+    Algum tipo de IA. commands, NLU
