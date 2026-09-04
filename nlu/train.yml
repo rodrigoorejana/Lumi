@@ -1,142 +1,144 @@
 commands:
-   #time
+  # ==========================================
+  # TIME (Horas)
+  # ==========================================
   - command:
-    input: Que horas são?
-    entity: time
-    action: getTime
+      input: que horas são
+      entity: time
+      action: getTime
   - command:
-    input: Me diga as horas
-    entity: time
-    action: getTime
+      input: me diga as horas
+      entity: time
+      action: getTime
   - command:
-    input: Me diga a hora
-    entity: time
-    action: getTime
+      input: me diga a hora
+      entity: time
+      action: getTime
   - command:
-    input: Que horas são agora?
-    entity: time
-    action: getTime
+      input: que horas são agora
+      entity: time
+      action: getTime
   - command:
-    input: Me diga as horas por favor
-    entity: time
-    action: getTime
+      input: que hora é agora
+      entity: time
+      action: getTime
   - command:
-    input: Me diga a hora por favor
-    entity: time
-    action: getTime
+      input: hora agora
+      entity: time
+      action: getTime
   - command:
-    input: Que horas são agora por favor?
-    entity: time
-    action: getTime
+      input: qual é a hora
+      entity: time
+      action: getTime
   - command:
-    input: Que hora é agora?
-    entity: time
-    action: getTime
-  
-   #date
+      input: tem como falar as horas
+      entity: time
+      action: getTime
   - command:
-    input: Que dia é hoje?
-    entity: date
-    action: getDate
+      input: horas por favor
+      entity: time
+      action: getTime
   - command:
-    input: Me diga a data de hoje?
-    entity: date
-    action: getDate
+      input: me fala as horas
+      entity: time
+      action: getTime
+
+  # ==========================================
+  # DATE (Data e Dias)
+  # ==========================================
   - command:
-    input: Me diga a data de hoje por favor
-    entity: date
-    action: getDate
+      input: que dia é hoje
+      entity: date
+      action: getDate
   - command:
-    input: Que dia é hoje por favor?
-    entity: date
-    action: getDate
+      input: me diga a data de hoje
+      entity: date
+      action: getDate
   - command:
-    input: Qual é a data de hoje?
-    entity: date
-    action: getDate
+      input: qual é a data de hoje
+      entity: date
+      action: getDate
   - command:
-    input: Qual é a data de hoje por favor?
-    entity: date
-    action: getDate
-  #weather
+      input: qual a data de hoje
+      entity: date
+      action: getDate
   - command:
-    input: Como está o tempo hoje?
-    entity: weather
-    action: getWeather
+      input: em que dia estamos
+      entity: date
+      action: getDate
   - command:
-    input: Me diga como está o tempo hoje?
-    entity: weather
-    action: getWeather
+      input: qual o dia de hoje
+      entity: date
+      action: getDate
   - command:
-    input: Me diga como está o tempo hoje por favor?
-    entity: weather
-    action: getWeather
+      input: me fala a data
+      entity: date
+      action: getDate
   - command:
-    input: Como está o tempo hoje por favor?
-    entity: weather
-    action: getWeather
+      input: dia de hoje
+      entity: date
+      action: getDate
   - command:
-    input: Qual é a previsão do tempo para hoje?
-    entity: weather
-    action: getWeather
+      input: data de hoje
+      entity: date
+      action: getDate
   - command:
-    input: Qual é a previsão do tempo para hoje por favor?
-    entity: weather
-    action: getWeather
+      input: que dia do mês é hoje
+      entity: date
+      action: getDate
+
+  # ==========================================
+  # WEATHER (Clima e Tempo)
+  # ==========================================
   - command:
-    input: Me diga a previsão do tempo para hoje?
-    entity: weather
-    action: getWeather
+      input: como está o tempo hoje
+      entity: weather
+      action: getWeather
   - command:
-    input: Me diga a previsão do tempo para hoje por favor?
-    entity: weather
-    action: getWeather
+      input: me diga como está o tempo hoje
+      entity: weather
+      action: getWeather
   - command:
-    input: Qual é a previsão do tempo para amanhã?
-    entity: weather
-    action: getWeather
+      input: qual é a previsão do tempo para hoje
+      entity: weather
+      action: getWeather
   - command:
-    input: Qual é a previsão do tempo para amanhã por favor?
-    entity: weather
-    action: getWeather
+      input: qual é a previsão do tempo para amanhã
+      entity: weather
+      action: getWeather
   - command:
-    input: Me diga a previsão do tempo para amanhã?
-    entity: weather
-    action: getWeather
+      input: qual é a previsão do tempo para o fim de semana
+      entity: weather
+      action: getWeather
   - command:
-    input: Me diga a previsão do tempo para amanhã por favor?
-    entity: weather
-    action: getWeather  
+      input: qual é a previsão do tempo para a próxima semana
+      entity: weather
+      action: getWeather
   - command:
-    input: Qual é a previsão do tempo para o fim de semana?
-    entity: weather
-    action: getWeather
+      input: vai chover hoje
+      entity: weather
+      action: getWeather
   - command:
-    input: Qual é a previsão do tempo para o fim de semana por favor?
-    entity: weather
-    action: getWeather
+      input: tá frio lá fora
+      entity: weather
+      action: getWeather
   - command:
-    input: Me diga a previsão do tempo para o fim de semana?
-    entity: weather
-    action: getWeather 
+      input: tá quente hoje
+      entity: weather
+      action: getWeather
   - command:
-    input: Me diga a previsão do tempo para o fim de semana por favor?
-    entity: weather
-    action: getWeather
+      input: como tá o tempo
+      entity: weather
+      action: getWeather
   - command:
-    input: Qual é a previsão do tempo para a próxima semana?
-    entity: weather
-    action: getWeather
+      input: clima hoje
+      entity: weather
+      action: getWeather
   - command:
-    input: Qual é a previsão do tempo para a próxima semana por favor?
-    entity: weather
-    action: getWeather
+      input: previsão do tempo
+      entity: weather
+      action: getWeather
   - command:
-    input: Me diga a previsão do tempo para a próxima semana?
-    entity: weather
-    action: getWeather
-  - command:
-    input: Me diga a previsão do tempo para a próxima semana por favor?
-    entity: weather
-    action: getWeather
-  
+      input: vai fazer sol hoje
+      entity: weather
+      action: getWeather

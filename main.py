@@ -1,24 +1,29 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import json
 import pyaudio
 import pyttsx3
 from vosk import Model, KaldiRecognizer
 
+# Add root directory to path for local module resolution
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import core
 from nlu.classifier import classify
 
-# --- Speech Synthesis (Text-to-Speech) ---
+# --- Text-to-Speech Engine Initialization ---
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[-2].id)
 
 def speak(text):
+    """Synthesizes speech and blocks until completed."""
     engine.say(text)
     engine.runAndWait()
 
-# --- Speech Recognition (Vosk Model) ---
+# --- Speech Recognition Setup (Vosk Model) ---
 model = Model('model')
 rec = KaldiRecognizer(model, 16000)
 
@@ -32,8 +37,8 @@ stream = p.open(
 )
 stream.start_stream()
 
-# --- Speech Recognition Loop ---
-CONFIDENCE_THRESHOLD = 0.60  # Minimum required NLU confidence score
+# --- Configuration & Main Event Loop ---
+CONFIDENCE_THRESHOLD = 0.60  # Minimum confidence score required to trigger actions
 
 try:
     while True:
@@ -45,28 +50,26 @@ try:
             result = json.loads(rec.Result())
             text = result.get('text', '').strip()
 
-            # Process only if spoken text was recognized
             if text:
-                # Unpack entity, action, and confidence score from the NLU classifier
+                # Extract entity, action, and confidence score from the NLU classifier
                 entity, action, confidence = classify(text)
                 
-                print(f"Text: '{text}' | Intent: {entity}/{action} | Confidence: {confidence:.2f}")
+                print(f"Text: {text} | Intent: {entity}/{action} | Confidence: {confidence:.2f}")
 
-                # Validate confidence threshold before executing actions
+                # Execute action only if the confidence score meets the threshold
                 if confidence >= CONFIDENCE_THRESHOLD:
-                    
-                    # Handle time retrieval intent
                     if entity == 'time' and action == 'getTime':
-                        current_time = core.SystemInfo.get_time()
-                        speak(f"Agora são {current_time}")
+                        speak(core.SystemInfo.get_time())
 
+                    elif entity == 'date' and action == 'getDate':
+                        speak(core.SystemInfo.get_date())
                 else:
                     print("Command not understood with sufficient confidence.")
 
 except KeyboardInterrupt:
-    print("\nShutting down Lumi...")
+    print("\nEncerrando Lumi...")
 finally:
-    # Ensure audio stream is properly closed on exit
+    # Ensure audio stream resources are cleanly released
     stream.stop_stream()
     stream.close()
     p.terminate()

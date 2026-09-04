@@ -9,10 +9,10 @@ LABELS_PATH = os.path.join(BASE_DIR, 'labels.txt')
 
 model = load_model(MODEL_PATH)
 
-# Retrieve dynamic input shape expected by the model (batch_size, max_seq, 256)
+# Retrieve dynamic max sequence length directly from the loaded model input shape
 MAX_SEQ = model.input_shape[1]
 
-# Load labels and strip empty trailing lines
+# Load labels file and strip empty lines
 with open(LABELS_PATH, 'r', encoding='utf-8') as f:
     labels = [line.strip() for line in f if line.strip()]
 
@@ -20,29 +20,29 @@ idx2label = {k: label for k, label in enumerate(labels)}
 
 def classify(text: str):
     """
-    Classifies an input text into an entity, action, and confidence score.
+    Classifies an input text into entity, action, and confidence score triplet.
     """
     if not text:
         return None, None, 0.0
 
-    # Encode input string into byte sequence
+    # Encode input text into byte sequence
     text_bytes = bytes(text.lower().strip().encode('utf-8'))
     
-    # Truncate text if it exceeds maximum sequence length trained
+    # Truncate text if it exceeds maximum sequence length
     if len(text_bytes) > MAX_SEQ:
         text_bytes = text_bytes[:MAX_SEQ]
 
-    # Build input matrix matching model shape
+    # Build input tensor matching model shape (1, MAX_SEQ, 256)
     x = np.zeros((1, MAX_SEQ, 256), dtype='float32')
     for k, ch in enumerate(text_bytes):
         x[0, k, int(ch)] = 1.0
 
-    # Run inference silently
+    # Execute model prediction silently
     out = model.predict(x, verbose=0)
     idx = int(np.argmax(out[0]))
     confidence = float(out[0][idx])
     
-    # Parse intent label (e.g., "time/getTime" -> entity="time", action="getTime")
+    # Parse label into entity and action (handles both / and \ delimiters)
     raw_label = idx2label.get(idx, "")
     if "/" in raw_label:
         entity, action = raw_label.split("/", 1)
