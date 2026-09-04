@@ -1,95 +1,107 @@
+import os
 import yaml
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.layers import Input, LSTM, Dense
 from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-# Load YAML training dataset
-data = yaml.safe_load(open('nlu\\train.yml', 'r', encoding='utf-8').read())
+# Suppress TensorFlow info logs
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+# --- 1. Load Dataset ---
+dataset_path = os.path.join('nlu', 'train.yml')
+data = yaml.safe_load(open(dataset_path, 'r', encoding='utf-8').read())
 
 inputs, outputs = [], []
 
 for command in data['commands']:
-    inputs.append(command['input'].lower())
+    inputs.append(command['input'].lower().strip())
+    # Standardize separator to forward slash to match classifier logic
     outputs.append(f"{command['entity']}/{command['action']}")
 
-
-# Text processing strategy: UTF-8 Byte-level encoding (0-255)
-
+# Calculate maximum sequence length in bytes
 max_seq = max([len(bytes(x.encode('utf-8'))) for x in inputs])
-
 print('Max sequence length (bytes):', max_seq)
 
-# Create input dataset using One-Hot Encoding: (samples, max_sequence, 256 bytes)
+# --- 2. Encode Inputs (One-Hot Byte Encoding) ---
 input_data = np.zeros((len(inputs), max_seq, 256), dtype='float32')
 for i, inp in enumerate(inputs):
     for k, ch in enumerate(bytes(inp.encode('utf-8'))):
         input_data[i, k, int(ch)] = 1.0
 
-
-# Target Output Processing (Categorical Intents)
-
+# --- 3. Encode Output Labels ---
 labels = sorted(list(set(outputs)))
+num_classes = len(labels)
 
-label2idx = {}
-idx2label = {}
+# Save labels mapping file
+labels_path = os.path.join('nlu', 'labels.txt')
+with open(labels_path, 'w', encoding='utf-8') as f:
+    for label in labels:
+        f.write(label + '\n')
 
-for k, label in enumerate(labels):
-    label2idx[label] = k
-    idx2label[k] = label
+label2idx = {label: k for k, label in enumerate(labels)}
+idx2label = {k: label for k, label in enumerate(labels)}
 
-output_indices = []
+output_indices = [label2idx[out] for out in outputs]
 
-for output in outputs:
-    output_indices.append(label2idx[output])
+# FIX: Pass num_classes instead of len(output_data)
+output_data = to_categorical(output_indices, num_classes=num_classes)
 
-# Convert target labels to one-hot vectors using unique class count
-output_data = to_categorical(output_indices, num_classes=len(labels))
+print('Sample target vector:', output_data[0])
 
+# --- 4. Build Neural Network ---
+model = Sequential([
+    # Explicit Input layer matching sequence length and byte vocabulary size
+    Input(shape=(max_seq, 256)),
+    LSTM(128),
+    Dense(num_classes, activation='softmax')
+])
 
-print("Sample target vector:", output_data[0])
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['acc']
+)
 
-# Define LSTM Model Architecture
-model = Sequential()
-model.add(LSTM(128, input_shape=(max_seq, 256)))
-model.add(Dense(len(labels), activation='softmax'))
+# --- 5. Training Callbacks & Execution ---
+callbacks = [
+    EarlyStopping(monitor='loss', patience=15, restore_best_weights=True),
+    ModelCheckpoint(os.path.join('nlu', 'model.keras'), monitor='acc', save_best_only=True)
+]
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+model.fit(
+    input_data, 
+    output_data, 
+    epochs=128, 
+    batch_size=4, 
+    callbacks=callbacks
+)
 
-# Train the model
-model.fit(input_data, output_data, epochs=128, batch_size=4)
+print("Model and labels saved successfully in 'nlu/' directory!")
 
-
-# Inference function: classify input string into an intent/action
+# --- 6. Inference Method ---
 def classify(text):
-    text_bytes = bytes(text.lower().encode('utf-8'))
+    text_bytes = bytes(text.lower().strip().encode('utf-8'))
     
-    # Truncate text if it exceeds maximum sequence length
+    # Truncate text if it exceeds maximum trained sequence
     if len(text_bytes) > max_seq:
         text_bytes = text_bytes[:max_seq]
 
-    # Initialize dynamic input tensor matching training shape
+    # Initialize dynamic array matching trained max_seq
     x = np.zeros((1, max_seq, 256), dtype='float32')
 
-    # Populate array with byte sequence
     for k, ch in enumerate(text_bytes):
         x[0, k, int(ch)] = 1.0
 
-    # Perform intent prediction
     out = model.predict(x, verbose=0)
     idx = out.argmax()
     confidence = out[0][idx]
     
-    print(f"Predicted intent: {idx2label[idx]} (Confidence: {confidence:.2f})")
+    return idx2label[idx], confidence
 
-
-# Interactive execution loop
-while True:
-    try:
-        text = input('\nEnter command: ')
-        if text:
-            classify(text)
-    except KeyboardInterrupt:
-        print("\nExiting inference loop...")
-        break
+# Quick execution check
+if __name__ == "__main__":
+    intent, conf = classify("que horas são agora")
+    print(f"Predicted Intent: {intent} | Confidence: {conf:.2f}")

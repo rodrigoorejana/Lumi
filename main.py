@@ -4,71 +4,69 @@ import os
 import json
 import pyaudio
 import pyttsx3
-from vosk import Model, KaldiRecognizer, SetLogLevel
+from vosk import Model, KaldiRecognizer
+
 import core
+from nlu.classifier import classify
 
-# Suppress internal C++ logs from Vosk
-SetLogLevel(-1)
-
-# Initialize TTS Engine
+# --- Speech Synthesis (Text-to-Speech) ---
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-if voices:
-    engine.setProperty('voice', voices[-2].id)
+engine.setProperty('voice', voices[-2].id)
 
-# Initialize Vosk Model
-if not os.path.exists("model"):
-    print("Model directory not found.")
-    exit(1)
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
 
+# --- Speech Recognition (Vosk Model) ---
 model = Model('model')
 rec = KaldiRecognizer(model, 16000)
 
-# Initialize PyAudio
 p = pyaudio.PyAudio()
-stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=8000)
+stream = p.open(
+    format=pyaudio.paInt16,
+    channels=1,
+    rate=16000,
+    input=True,
+    frames_per_buffer=2048
+)
 stream.start_stream()
 
-def speak(text):
-    # Stop microphone stream while speaking to prevent self-listening loop
-    stream.stop_stream()
-    engine.say(text)
-    engine.runAndWait()
-    
-    # Restart stream and clear any audio accumulated during speech
-    stream.start_stream()
-    stream.read(stream.get_read_available(), exception_on_overflow=False)
-
-print("Lumi pronta e escutando...")
+# --- Speech Recognition Loop ---
+CONFIDENCE_THRESHOLD = 0.60  # Minimum required NLU confidence score
 
 try:
     while True:
-        # Avoid crash on buffer overflow
-        data = stream.read(4000, exception_on_overflow=False)
+        data = stream.read(2048, exception_on_overflow=False)
         if len(data) == 0:
             break
 
         if rec.AcceptWaveform(data):
             result = json.loads(rec.Result())
-            text = result.get('text', '')
+            text = result.get('text', '').strip()
 
+            # Process only if spoken text was recognized
             if text:
-                print(f"Você disse: {text}")
+                # Unpack entity, action, and confidence score from the NLU classifier
+                entity, action, confidence = classify(text)
                 
-                # Command: Shutdown
-                if "desligar" in text.lower():
-                    speak("Desligando...")
-                    break
+                print(f"Text: '{text}' | Intent: {entity}/{action} | Confidence: {confidence:.2f}")
 
-                # Command: Tell time (flexible matching)
-                if "que horas são" in text.lower() or "horas" in text.lower():
-                    speak(core.SystemInfo.get_time())
+                # Validate confidence threshold before executing actions
+                if confidence >= CONFIDENCE_THRESHOLD:
+                    
+                    # Handle time retrieval intent
+                    if entity == 'time' and action == 'getTime':
+                        current_time = core.SystemInfo.get_time()
+                        speak(f"Agora são {current_time}")
+
+                else:
+                    print("Command not understood with sufficient confidence.")
 
 except KeyboardInterrupt:
-    print("\nEncerrando...")
-
+    print("\nShutting down Lumi...")
 finally:
-    # Cleanup audio resources
+    # Ensure audio stream is properly closed on exit
     stream.stop_stream()
     stream.close()
     p.terminate()
