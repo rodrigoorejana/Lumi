@@ -1,6 +1,6 @@
 commands:
   # ==========================================
-  # TIME (Horas)
+  # TIME (Horas) - 15 variações
   # ==========================================
   - command:
       input: que horas são
@@ -42,9 +42,29 @@ commands:
       input: me fala as horas
       entity: time
       action: getTime
+  - command:
+      input: que horas tem
+      entity: time
+      action: getTime
+  - command:
+      input: qual o horário atual
+      entity: time
+      action: getTime
+  - command:
+      input: me informa as horas
+      entity: time
+      action: getTime
+  - command:
+      input: sabe me dizer as horas
+      entity: time
+      action: getTime
+  - command:
+      input: horas
+      entity: time
+      action: getTime
 
   # ==========================================
-  # DATE (Data e Dias)
+  # DATE (Data e Dias) - 15 variações
   # ==========================================
   - command:
       input: que dia é hoje
@@ -86,9 +106,29 @@ commands:
       input: que dia do mês é hoje
       entity: date
       action: getDate
+  - command:
+      input: me diz o dia
+      entity: date
+      action: getDate
+  - command:
+      input: qual é a data
+      entity: date
+      action: getDate
+  - command:
+      input: hoje é que dia
+      entity: date
+      action: getDate
+  - command:
+      input: que dia da semana é hoje
+      entity: date
+      action: getDate
+  - command:
+      input: data por favor
+      entity: date
+      action: getDate
 
   # ==========================================
-  # WEATHER (Clima e Tempo)
+  # WEATHER (Clima e Tempo) - 15 variações
   # ==========================================
   - command:
       input: como está o tempo hoje
@@ -103,15 +143,7 @@ commands:
       entity: weather
       action: getWeather
   - command:
-      input: qual é a previsão do tempo para amanhã
-      entity: weather
-      action: getWeather
-  - command:
-      input: qual é a previsão do tempo para o fim de semana
-      entity: weather
-      action: getWeather
-  - command:
-      input: qual é a previsão do tempo para a próxima semana
+      input: qual é a previsão do tempo
       entity: weather
       action: getWeather
   - command:
@@ -142,3 +174,147 @@ commands:
       input: vai fazer sol hoje
       entity: weather
       action: getWeather
+  - command:
+      input: qual a temperatura de hoje
+      entity: weather
+      action: getWeather
+  - command:
+      input: como está o clima agora
+      entity: weather
+      action: getWeather
+  - command:
+      input: me fala o clima
+      entity: weather
+      action: getWeather
+  - command:
+      input: como tá o clima lá fora
+      entity: weather
+      action: getWeather
+
+  # ==========================================
+  # SYSTEM / EXPLORER - 15 variações
+  # ==========================================
+  - command:
+      input: abrir explorador de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abre o explorador de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abrir pasta de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abre meus arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abrir explorer
+      entity: open
+      action: getExplorer
+  - command:
+      input: abre a pasta de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abrir gerenciador de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: iniciar explorador de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abre os meus arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: explorador de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: pode abrir o explorador de arquivos
+      entity: open
+      action: getExplorer
+  - command:
+      input: abre o explorer por favor
+      entity: open
+      action: getExplorer
+  - command:
+      input: abrir pastas
+      entity: open
+      action: getExplorer
+  - command:
+      input: abre a pasta por favor
+      entity: open
+      action: getExplorer
+  - command:
+      input: iniciar explorer
+      entity: open
+      action: getExplorer
+
+  # ==========================================
+  # NOTEPAD / APPLICATIONS - 15 variações
+  # ==========================================
+  - command:
+      input: abrir bloco de notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: abre o bloco de notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: abrir notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: iniciar bloco de notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: abre o bloco de notas por favor
+      entity: open
+      action: getNotepad
+  - command:
+      input: bloco de notas por favor
+      entity: open
+      action: getNotepad
+  - command:
+      input: iniciar bloco de notas por favor
+      entity: open
+      action: getNotepad
+  - command:
+      input: abrir notas por favor
+      entity: open
+      action: getNotepad
+  - command:
+      input: bloco de notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: abre o bloco de notas pra mim
+      entity: open
+      action: getNotepad
+  - command:
+      input: pode abrir o bloco de notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: abre o editor de texto
+      entity: open
+      action: getNotepad
+  - command:
+      input: abrir editor de texto
+      entity: open
+      action: getNotepad
+  - command:
+      input: me abre o bloco de notas
+      entity: open
+      action: getNotepad
+  - command:
+      input: iniciar notas
+      entity: open
+      action: getNotepad

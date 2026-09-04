@@ -63,6 +63,10 @@ try:
 
                     elif entity == 'date' and action == 'getDate':
                         speak(core.SystemInfo.get_date())
+                    elif entity == 'open' and action == 'getExplorer':
+                        speak(core.SystemInfo.open_explorer())
+                    elif entity == 'open' and action == 'getNotepad':
+                        speak(core.SystemInfo.open_notepad())
                 else:
                     print("Command not understood with sufficient confidence.")
 

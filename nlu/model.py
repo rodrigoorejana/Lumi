@@ -64,12 +64,15 @@ output_data = to_categorical(output_indices, num_classes=num_classes)
 # --- 4. Build Neural Network Architecture ---
 model = Sequential([
     Input(shape=(max_seq, 256)),
-    LSTM(128),
+    LSTM(128, return_sequences=False),
+    Dense(64, activation='relu'),
     Dense(num_classes, activation='softmax')
 ])
 
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0008)
+
 model.compile(
-    optimizer='adam',
+    optimizer=optimizer,
     loss='categorical_crossentropy',
     metrics=['acc']
 )
@@ -77,17 +80,17 @@ model.compile(
 # --- 5. Callbacks and Model Training ---
 model_save_path = os.path.join('nlu', 'model.keras')
 
-# Increased patience and epochs to ensure loss convergence on multi-class dataset
 callbacks = [
-    EarlyStopping(monitor='acc', patience=30, restore_best_weights=True),
+    EarlyStopping(monitor='loss', patience=50, restore_best_weights=True),
     ModelCheckpoint(model_save_path, monitor='acc', save_best_only=True)
 ]
 
 model.fit(
     input_data, 
     output_data, 
-    epochs=200, 
+    epochs=250, 
     batch_size=4, 
+    shuffle=True,
     callbacks=callbacks
 )
 

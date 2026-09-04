@@ -1,3 +1,4 @@
+import os
 import datetime
 
 class SystemInfo:
@@ -41,7 +42,20 @@ class SystemInfo:
         
         return f"Hoje é {day_name}, dia {now.day} de {month_name} de {now.year}."
 
+    @staticmethod
+    def open_explorer() -> str:
+        """Opens Windows File Explorer."""
+        os.system("explorer")
+        return "Abrindo o explorador de arquivos."
+    
+    @staticmethod
+    def open_notepad() -> str:
+        """Opens the default notepad application."""
+        os.system("notepad")
+        return "Abrindo o bloco de notas."
 
 if __name__ == "__main__":
     print(SystemInfo.get_time())
     print(SystemInfo.get_date())
+    print(SystemInfo.open_explorer())
+    print(SystemInfo.open_notepad())

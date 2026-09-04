@@ -1,3 +1,5 @@
 date/getDate
+open/getExplorer
+open/getNotepad
 time/getTime
 weather/getWeather
