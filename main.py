@@ -60,13 +60,22 @@ try:
                 if confidence >= CONFIDENCE_THRESHOLD:
                     if entity == 'time' and action == 'getTime':
                         speak(core.SystemInfo.get_time())
-
+                        rec.Reset()
                     elif entity == 'date' and action == 'getDate':
                         speak(core.SystemInfo.get_date())
+                        rec.Reset()
                     elif entity == 'open' and action == 'getExplorer':
                         speak(core.SystemInfo.open_explorer())
+                        rec.Reset()
+                    elif entity == 'close' and action == 'closeExplorer':
+                        speak(core.SystemInfo.close_explorer())
+                        rec.Reset()
                     elif entity == 'open' and action == 'getNotepad':
                         speak(core.SystemInfo.open_notepad())
+                        rec.Reset()
+                    elif entity == 'close' and action == 'closeNotepad':
+                        speak(core.SystemInfo.close_notepad())
+                        rec.Reset()
                 else:
                     print("Command not understood with sufficient confidence.")
 

@@ -254,6 +254,69 @@ commands:
       input: iniciar explorer
       entity: open
       action: getExplorer
+# ==========================================
+  # CLOSE EXPLORER - 15 variações
+  # ==========================================
+  - command:
+      input: fechar explorador de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fecha o explorador de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fechar pasta de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fecha meus arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fechar explorer
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fecha a pasta de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fechar gerenciador de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: encerra o explorador de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fecha o explorer por favor
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fechar pastas
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fecha a pasta por favor
+      entity: close
+      action: closeExplorer
+  - command:
+      input: encerrar explorer
+      entity: close
+      action: closeExplorer
+  - command:
+      input: pode fechar o explorador de arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: encerra os meus arquivos
+      entity: close
+      action: closeExplorer
+  - command:
+      input: fechar as pastas de arquivos
+      entity: close
+      action: closeExplorer
 
   # ==========================================
   # NOTEPAD / APPLICATIONS - 15 variações
@@ -318,3 +381,66 @@ commands:
       input: iniciar notas
       entity: open
       action: getNotepad
+# ==========================================
+  # CLOSE APPLICATIONS - 15 variações
+  # ==========================================
+  - command:
+      input: fechar bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fecha o bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fechar notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fecha o bloco de notas por favor
+      entity: close
+      action: closeNotepad
+  - command:
+      input: encerrar bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: encerra o bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fechar editor de texto
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fecha as notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fecha o bloco de notas pra mim
+      entity: close
+      action: closeNotepad
+  - command:
+      input: pode fechar o bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: encerra o bloco de notas por favor
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fecha o editor de texto
+      entity: close
+      action: closeNotepad
+  - command:
+      input: fechar aplicativo do bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: desativar bloco de notas
+      entity: close
+      action: closeNotepad
+  - command:
+      input: encerra as notas
+      entity: close
+      action: closeNotepad

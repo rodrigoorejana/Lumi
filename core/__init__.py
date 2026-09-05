@@ -1,5 +1,6 @@
 import os
 import datetime
+import subprocess
 
 class SystemInfo:
     def __init__(self):
@@ -45,14 +46,24 @@ class SystemInfo:
     @staticmethod
     def open_explorer() -> str:
         """Opens Windows File Explorer."""
-        os.system("explorer")
+        subprocess.Popen("explorer")
         return "Abrindo o explorador de arquivos."
     
     @staticmethod
     def open_notepad() -> str:
         """Opens the default notepad application."""
-        os.system("notepad")
+        subprocess.Popen("notepad")
         return "Abrindo o bloco de notas."
+    @staticmethod
+    def close_notepad() -> str:
+        """Encerra todas as instâncias do Bloco de Notas no Windows."""
+        subprocess.Popen("taskkill /f /im notepad.exe", shell=True)
+        return "Fechando o bloco de notas."
+    def close_explorer() -> str:
+        """Fecha as janelas do Explorador de Arquivos sem fechar a barra de tarefas."""
+        cmd = 'powershell -command "(New-Object -ComObject Shell.Application).Windows() | ForEach-Object { $_.Quit() }"'
+        subprocess.Popen(cmd, shell=True)
+        return "Fechando as janelas do explorador de arquivos."
 
 if __name__ == "__main__":
     print(SystemInfo.get_time())
